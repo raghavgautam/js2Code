@@ -1,16 +1,16 @@
+
 import org.testng.annotations._
 
-import scala.io.Source
+import scala.collection.JavaConverters._
 
 class SimpleTest {
 
   @DataProvider(name= "pieceMovesProvider")
   def pieceMovesProvider(): Array[Array[Object]] = {
-  val simpleJs = Source.fromURL(this.getClass.getResource("simple.json")).mkString
-  val nestedJs = Source.fromURL(this.getClass.getResource("nested.json")).mkString
-    Array(
-      Array[Object](simpleJs),
-      Array[Object](nestedJs))
+    val resources = this.getClass.getClassLoader.getResources("simple.json").asScala.toList
+    val jsons: List[Object] = resources.map(io.Source.fromURL(_).mkString).map(_.asInstanceOf[Object])
+    val ret: List[Array[Object]] = jsons.map(Array(_))
+    ret.toArray
   }
 
   @Test(dataProvider = "pieceMovesProvider")
