@@ -1,34 +1,13 @@
 import org.testng.annotations._
 
+import scala.io.Source
+
 class SimpleTest {
-
-  val simpleJs =
-    """
-      |{
-      |  "id": 7,
-      |  "name": "jb"
-      |}
-    """.stripMargin
-
-  val nestedJs =
-    """
-      |{
-      |  "menu": {
-      |    "id": "file",
-      |    "value": "File",
-      |    "popup": {
-      |      "menuitem": [
-      |        {"value": "New", "onclick": "CreateNewDoc()"},
-      |        {"value": "Open", "onclick": "OpenDoc()"},
-      |        {"value": "Close", "onclick": "CloseDoc()"}
-      |      ]
-      |    }
-      |  }
-      |}
-    """.stripMargin
 
   @DataProvider(name= "pieceMovesProvider")
   def pieceMovesProvider(): Array[Array[Object]] = {
+  val simpleJs = Source.fromURL(this.getClass.getResource("simple.json")).mkString
+  val nestedJs = Source.fromURL(this.getClass.getResource("nested.json")).mkString
     Array(
       Array[Object](simpleJs),
       Array[Object](nestedJs))
