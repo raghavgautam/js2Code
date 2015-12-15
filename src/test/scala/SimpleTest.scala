@@ -6,8 +6,8 @@ import scala.collection.JavaConverters._
 
 class SimpleTest {
 
-  @DataProvider(name= "pieceMovesProvider")
-  def pieceMovesProvider(): Array[Array[Object]] = {
+  @DataProvider(name= "jsonProvider")
+  def jsonProvider(): Array[Array[Object]] = {
     val simpleJson = this.getClass.getResource("simple.json").getFile
     val resourceDir: File = new File(simpleJson).getParentFile
     val jsonFilter: Array[String] = Array("json")
@@ -17,8 +17,8 @@ class SimpleTest {
     ret.toArray
   }
 
-  @Test(dataProvider = "pieceMovesProvider")
-  def testCanTake(jsStr:String) = {
+  @Test(dataProvider = "jsonProvider")
+  def testJs2Java(jsStr:String) = {
     val javaStr = js2Java.generate(jsStr, "JsRoot")
     println(jsStr)
     javaStr.map(_._2).foreach(println)
