@@ -1,22 +1,26 @@
 
+import java.io.File
+import org.apache.commons.io.FileUtils
 import org.testng.annotations._
-
 import scala.collection.JavaConverters._
 
 class SimpleTest {
 
   @DataProvider(name= "pieceMovesProvider")
   def pieceMovesProvider(): Array[Array[Object]] = {
-    val resources = this.getClass.getClassLoader.getResources("simple.json").asScala.toList
-    val jsons: List[Object] = resources.map(io.Source.fromURL(_).mkString).map(_.asInstanceOf[Object])
-    val ret: List[Array[Object]] = jsons.map(Array(_))
+    val simpleJson = this.getClass.getResource("simple.json").getFile
+    val resourceDir: File = new File(simpleJson).getParentFile
+    val jsonFilter: Array[String] = Array("json")
+    val jsonFiles = FileUtils.listFiles(resourceDir, jsonFilter, false)
+    val jsonStrings = jsonFiles.asScala.map(io.Source.fromFile(_).mkString).toList
+    val ret: List[Array[Object]] = jsonStrings.map(_.asInstanceOf[Object]).map(Array(_))
     ret.toArray
   }
 
   @Test(dataProvider = "pieceMovesProvider")
   def testCanTake(jsStr:String) = {
-    val javaStr = Main.getJava(jsStr).head
-    print(jsStr)
+    val javaStr = new Js2Java(jsStr).generate
+    println(jsStr)
     println(javaStr)
   }
 }
