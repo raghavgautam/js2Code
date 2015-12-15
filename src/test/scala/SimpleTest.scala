@@ -19,8 +19,8 @@ class SimpleTest {
 
   @Test(dataProvider = "pieceMovesProvider")
   def testCanTake(jsStr:String) = {
-    val javaStr = new Js2Java(jsStr).generate
+    val javaStr = js2Java.generate(jsStr, "JsRoot")
     println(jsStr)
-    println(javaStr)
+    javaStr.map(_._2).foreach(println)
   }
 }

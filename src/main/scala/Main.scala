@@ -13,5 +13,5 @@ object Main extends App {
       |  }
       |}}
     """.stripMargin
-  println(new Js2Java(data).generate)
+  println(js2Java.generate(data, "JsRoot"))
 }
