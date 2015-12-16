@@ -19,13 +19,26 @@ object js2Java {
         case _ => value.getClass.getSimpleName
       }
     }
+    private def sanitizeFieldName(name: String): String = {
+      val x = mutable.StringBuilder.newBuilder
+      x += name.head
+      val partName = for(i <- 1 until name.length; prev = name(i - 1); curr = name(i)) yield {
+        if (Set('-', '_').contains(prev))
+          curr.toUpper
+        else
+          curr
+      }
+      x ++= partName
+      x.toString().filter(_.isLetterOrDigit)
+    }
     private def genFields(props: Map[String, Any]): Iterable[String] = {
       props.map { kv =>
-        val fieldName: String = kv._1
+        val origName: String = kv._1
+        val fieldName: String = sanitizeFieldName(origName)
         val typ: Any = getType(kv)
         val fieldHeaderTemplate = "@SerializedName(\"%s\")"
         val fieldTemplate: String = "final %s %s;"
-        fieldHeaderTemplate.format(fieldName) + "\n" +
+        fieldHeaderTemplate.format(origName) + "\n" +
           fieldTemplate.format(typ, fieldName) + "\n"
       }
     }
