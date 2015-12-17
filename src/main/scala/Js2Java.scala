@@ -3,14 +3,8 @@ import scala.collection.mutable
 
 case class Cls(clsName: String, fields: Iterable[Field]) {
   override def toString: String = {
-    val classTemplate: String =
-      """
-        |class $className {
-        |$fields
-        |}
-      """.stripMargin
     val classBody: String = fields.map(_.toString).reduce(_ + _)
-    TemplateRenderer.render(classTemplate, Map("className" -> clsName, "fields" -> classBody))
+    Template.render(Template.classTemplate, Map("className" -> clsName, "fields" -> classBody))
   }
 }
 case class Field(origName: String, typ: String) {
@@ -29,12 +23,7 @@ case class Field(origName: String, typ: String) {
   }
 
   override def toString = {
-    val fieldTemplate: String =
-      """
-        |    @SerializedName("$originalFieldName")
-        |    final $fieldType $fieldName;
-      """.stripMargin
-    TemplateRenderer.render(fieldTemplate, Map("originalFieldName" -> origName, "fieldType" -> typ, "fieldName" -> fieldName))
+    Template.render(Template.fieldTemplate, Map("originalFieldName" -> origName, "fieldType" -> typ, "fieldName" -> fieldName))
   }
 }
 

@@ -3,7 +3,7 @@ import java.io.StringWriter
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.tools.ToolManager
 
-object TemplateRenderer {
+object Template {
   val manager = new ToolManager()
   manager.autoConfigure(true)
   private val velocityEngine: VelocityEngine = new VelocityEngine()
@@ -14,4 +14,15 @@ object TemplateRenderer {
     velocityEngine.evaluate(context, w, "Test template", template)
     w.toString
   }
+  val classTemplate: String =
+    """
+      |class $className {
+      |$fields
+      |}
+    """.stripMargin
+  val fieldTemplate: String =
+    """
+      |    @SerializedName("$originalFieldName")
+      |    final $fieldType $fieldName;
+    """.stripMargin
 }
