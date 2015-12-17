@@ -1,11 +1,13 @@
+import scala.collection.immutable.Iterable
 import scala.collection.mutable
 
 object js2Java {
   def generate(jsonStr: String, clsName: String) = {
-    new Js2Java(jsonStr, clsName).generate
+    val parsedJson: Any = scala.util.parsing.json.JSON.parseFull(jsonStr).get
+    new Js2Java(parsedJson, clsName).generate
   }
 
-  private class Js2Java(json: String, className: String) {
+  private class Js2Java(parsedJson: Any, className: String) {
     val classes = mutable.ListBuffer[(String, String)]()
 
     private def getType(kv: (String, Any)): String = {
@@ -31,28 +33,37 @@ object js2Java {
       x ++= partName
       x.toString().filter(_.isLetterOrDigit)
     }
-    private def genFields(props: Map[String, Any]): Iterable[String] = {
+    case class Cls(clsName: String, fields: Iterable[Field])
+    case class Field(origName: String, typ: String) {
+      def fieldName: String = sanitizeFieldName(origName)
+    }
+    private def genFields(props: Map[String, Any]): Iterable[Field] = {
       props.map { kv =>
         val origName: String = kv._1
-        val fieldName: String = sanitizeFieldName(origName)
         val typ: Any = getType(kv)
-        val fieldHeaderTemplate = "@SerializedName(\"%s\")"
-        val fieldTemplate: String = "final %s %s;"
-        fieldHeaderTemplate.format(origName) + "\n" +
-          fieldTemplate.format(typ, fieldName) + "\n"
+        Field(origName, typ.toString)
       }
     }
-    private def genClass(props: Map[String, Any], className: String): String = {
-      val classStart: String = s"class $className {"
-      val classBody: String = genFields(props).reduce(_ + "\n" + _)
-      val classEnd: String = "}"
-      s"$classStart\n$classBody$classEnd\n"
+    private def genCode(cls: Cls): String = {
+      val classTemplate: String =
+        """
+          |class %s {
+          |%s
+          |}
+        """.stripMargin
+      val fieldTemplate: String =
+        """
+          |@SerializedName("%s")
+          |final %s %s;
+        """.stripMargin
+      val classBody: String = cls.fields.map(f => {fieldTemplate.format(f.origName, f.typ, f.fieldName)}).reduce(_ + _)
+      classTemplate.format(cls.clsName, classBody)
     }
 
     def parseArrOrMap(parsed: Any, className: String): String = {
       val clsNameDef: (String, String) = parsed match {
-        case props: Map[String, Any] => (className, genClass(props, className))
-        case propsArr: Seq[Map[String, Any]] => (s"oneOf$className[]", genClass(propsArr.head, s"oneOf$className"))
+        case props: Map[String, Any] => (className, genCode(Cls(className, genFields(props))))
+        case propsArr: Seq[Map[String, Any]] => (s"oneOf$className[]", genCode(Cls(s"oneOf$className", genFields(propsArr.head))))
         case _ => throw new Exception(parsed.toString)
       }
       classes.append(clsNameDef)
@@ -60,8 +71,7 @@ object js2Java {
     }
 
     def generate: List[(String, String)] = {
-      val parsed: Any = scala.util.parsing.json.JSON.parseFull(json).get
-      parseArrOrMap(parsed, className)
+      parseArrOrMap(parsedJson, className)
       classes.reverse.toList
     }
   }

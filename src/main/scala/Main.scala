@@ -17,7 +17,7 @@ object Main extends App {
     case 0 =>
       println("No arg provided. Using demo data...")
       println(data)
-      println(js2Java.generate(data, "JsRoot"))
+      printJava(js2Java.generate(data, "JsRoot"), s"Invalid json.\n${data.take(500)}")
       println("Please supply a json file name or url as argument.")
     case 1 =>
       val arg: String = args.head
