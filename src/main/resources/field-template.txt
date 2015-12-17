@@ -1,5 +1,6 @@
-    @SerializedName("$originalFieldName")
-    final $fieldType $fieldName;
-    final $fieldType get$fieldName {
-        return $fieldName;
+
+    @SerializedName("$field.origName")
+    final $field.typ() $field.name();
+    final $field.typ() get$field.name() {
+        return $field.name();
     }

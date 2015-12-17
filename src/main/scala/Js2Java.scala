@@ -1,14 +1,15 @@
 import scala.collection.immutable.Iterable
 import scala.collection.mutable
 
-case class Cls(clsName: String, fields: Iterable[Field]) {
+case class Cls(name: String, fields: Iterable[Field]) {
+  val body: String = fields.map(_.toString).reduce(_ + _)
+
   override def toString: String = {
-    val classBody: String = fields.map(_.toString).reduce(_ + _)
-    Template.render(Template.classTemplate, Map("className" -> clsName, "fields" -> classBody))
+    Template.render(Template.classTemplate, Map("class" -> this))
   }
 }
 case class Field(origName: String, typ: String) {
-  def fieldName: String = sanitizeFieldName(origName)
+  def name: String = sanitizeFieldName(origName)
   private def sanitizeFieldName(name: String): String = {
     val x = mutable.StringBuilder.newBuilder
     x += name.head
@@ -23,7 +24,7 @@ case class Field(origName: String, typ: String) {
   }
 
   override def toString = {
-    Template.render(Template.fieldTemplate, Map("originalFieldName" -> origName, "fieldType" -> typ, "fieldName" -> fieldName))
+    Template.render(Template.fieldTemplate, Map("field" -> this))
   }
 }
 
@@ -61,7 +62,7 @@ object js2Java {
         case _ => throw new Exception(parsed.toString)
       }
       classes.append(cls)
-      cls.clsName
+      cls.name
     }
 
     def generate = {
