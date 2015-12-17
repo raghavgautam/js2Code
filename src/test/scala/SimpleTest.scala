@@ -26,6 +26,6 @@ class SimpleTest {
   def testJs2Java(jsStr:String, clsName: String) = {
     val javaStr = js2Java.generate(jsStr, clsName)
     println(jsStr)
-    javaStr.map(_._2).foreach(println)
+    javaStr.foreach(println)
   }
 }

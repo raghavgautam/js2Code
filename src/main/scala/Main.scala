@@ -30,9 +30,9 @@ object Main extends App {
 
   }
 
-  def printJava(java: List[(String, String)], message: String): Unit = {
+  def printJava(java: List[Cls], message: String): Unit = {
     try {
-      java.map(_._2).foreach(println)
+      java.foreach(println)
     } catch {
       case ex: Throwable => println(message)
     }
