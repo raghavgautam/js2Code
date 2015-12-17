@@ -1,18 +1,5 @@
 object Main extends App {
-  val data =
-    """
-      |{"menu": {
-      |  "id": "file",
-      |  "value": "File",
-      |  "popup": {
-      |    "menuitem": [
-      |      {"value": "New", "onclick": "CreateNewDoc()"},
-      |      {"value": "Open", "onclick": "OpenDoc()"},
-      |      {"value": "Close", "onclick": "CloseDoc()"}
-      |    ]
-      |  }
-      |}}
-    """.stripMargin
+  val data = io.Source.fromURL(getClass.getResource("sample.json")).mkString
   args.length match {
     case 0 =>
       println("No arg provided. Using demo data...")
