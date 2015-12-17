@@ -9,12 +9,7 @@ case class Cls(clsName: String, fields: Iterable[Field]) {
         |%s
         |}
       """.stripMargin
-    val fieldTemplate: String =
-      """
-        |@SerializedName("%s")
-        |final %s %s;
-      """.stripMargin
-    val classBody: String = fields.map(f => {fieldTemplate.format(f.origName, f.typ, f.fieldName)}).reduce(_ + _)
+    val classBody: String = fields.map(_.toString).reduce(_ + _)
     classTemplate.format(clsName, classBody)
   }
 }
@@ -31,6 +26,15 @@ case class Field(origName: String, typ: String) {
     }
     x ++= partName
     x.toString().filter(_.isLetterOrDigit)
+  }
+
+  override def toString = {
+    val fieldTemplate: String =
+      """
+        |@SerializedName("%s")
+        |final %s %s;
+      """.stripMargin
+    fieldTemplate.format(origName, typ, fieldName)
   }
 }
 
