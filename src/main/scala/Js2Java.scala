@@ -1,16 +1,16 @@
-import scala.collection.immutable.Iterable
+import scala.collection.immutable.{Iterable, WrappedString}
 import scala.collection.mutable
 
-case class Cls(name: String, fields: Iterable[Field]) {
-  val body: String = fields.map(_.toString).reduce(_ + _)
+case class Cls(name: WrappedString, fields: Iterable[Field]) {
+  val body: WrappedString = fields.map(_.toString).reduce(_ + _)
 
   override def toString: String = {
     Template.render(Template.classTemplate, Map("class" -> this))
   }
 }
-case class Field(origName: String, typ: String) {
-  def name: String = sanitizeFieldName(origName)
-  private def sanitizeFieldName(name: String): String = {
+case class Field(origName: WrappedString, `type`: WrappedString) {
+  val name = sanitizeFieldName(origName)
+  private def sanitizeFieldName(name: WrappedString): WrappedString = {
     val x = mutable.StringBuilder.newBuilder
     x += name.head
     val partName = for(i <- 1 until name.length; prev = name(i - 1); curr = name(i)) yield {

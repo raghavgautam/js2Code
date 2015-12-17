@@ -1,6 +1,6 @@
 
-    @SerializedName("$field.origName")
-    final $field.typ() $field.name();
-    final $field.typ() get$field.name() {
+    @SerializedName("$field.origName()")
+    final $field.type() $field.name();
+    public $field.type() get$field.name().capitalize() {
         return $field.name();
     }
