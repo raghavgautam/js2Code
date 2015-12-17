@@ -14,15 +14,6 @@ object Template {
     velocityEngine.evaluate(context, w, "Test template", template)
     w.toString
   }
-  val classTemplate: String =
-    """
-      |class $className {
-      |$fields
-      |}
-    """.stripMargin
-  val fieldTemplate: String =
-    """
-      |    @SerializedName("$originalFieldName")
-      |    final $fieldType $fieldName;
-    """.stripMargin
+  val classTemplate: String = io.Source.fromURL(getClass.getResource("class-template.txt")).mkString
+  val fieldTemplate: String = io.Source.fromURL(getClass.getResource("field-template.txt")).mkString
 }

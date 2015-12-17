@@ -1,0 +1,5 @@
+    @SerializedName("$originalFieldName")
+    final $fieldType $fieldName;
+    final $fieldType get$fieldName {
+        return $fieldName;
+    }
