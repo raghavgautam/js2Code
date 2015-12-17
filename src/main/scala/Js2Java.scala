@@ -5,12 +5,12 @@ case class Cls(clsName: String, fields: Iterable[Field]) {
   override def toString: String = {
     val classTemplate: String =
       """
-        |class %s {
-        |%s
+        |class $className {
+        |$fields
         |}
       """.stripMargin
     val classBody: String = fields.map(_.toString).reduce(_ + _)
-    classTemplate.format(clsName, classBody)
+    TemplateRenderer.render(classTemplate, Map("className" -> clsName, "fields" -> classBody))
   }
 }
 case class Field(origName: String, typ: String) {
@@ -31,10 +31,10 @@ case class Field(origName: String, typ: String) {
   override def toString = {
     val fieldTemplate: String =
       """
-        |@SerializedName("%s")
-        |final %s %s;
+        |    @SerializedName("$originalFieldName")
+        |    final $fieldType $fieldName;
       """.stripMargin
-    fieldTemplate.format(origName, typ, fieldName)
+    TemplateRenderer.render(fieldTemplate, Map("originalFieldName" -> origName, "fieldType" -> typ, "fieldName" -> fieldName))
   }
 }
 
