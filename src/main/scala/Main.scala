@@ -1,5 +1,5 @@
 object Main extends App {
-  val data = io.Source.fromURL(getClass.getResource("sample.json")).mkString
+  val data = Util.getResource("sample.json")
   args.length match {
     case 0 =>
       println("No arg provided. Using demo data...")
