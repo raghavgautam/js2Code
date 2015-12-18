@@ -6,20 +6,19 @@ import scala.collection.JavaConverters._
 
 class SimpleTest {
 
-  @DataProvider(name= "jsonProvider")
+  @DataProvider(name = "jsonProvider")
   def jsonProvider(): Array[Array[Object]] = {
     def getJsonFiles: Array[File] = {
       val simpleJson = this.getClass.getResource("simple.json").getFile
       val resourceDir: File = new File(simpleJson).getParentFile
       val jsonFilter: Array[String] = Array("json")
-      val jsonFiles = FileUtils.listFiles(resourceDir, jsonFilter, false).asScala.toList
-      jsonFiles.toArray
+      FileUtils.listFiles(resourceDir, jsonFilter, false).asScala.toArray
     }
     def asObject(s: String) = s.asInstanceOf[Object]
-    val jsonFiles: Array[File] = getJsonFiles
-    val jsonFileNames = jsonFiles.map(_.getName.split('.').head.capitalize).map(asObject)
-    val jsonStrings = jsonFiles.map(io.Source.fromFile(_).mkString).map(asObject)
-    jsonStrings.zip(jsonFileNames).map(p => Array(p._1, p._2))
+    val jsonFiles: Array[String] = getJsonFiles.map(_.getName)
+    val clsNames = jsonFiles.map(_.split('.').head.capitalize).map(asObject)
+    val jsonStrings = jsonFiles.map(Util.getResource)
+    jsonStrings.zip(clsNames).map(p => Array(p._1, p._2))
   }
 
   @Test(dataProvider = "jsonProvider")
