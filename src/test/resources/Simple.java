@@ -1,13 +1,13 @@
 class Simple {
 
     @SerializedName("id")
-    final Double id;
+    private final Double id = null;
     public Double getId() {
         return id;
     }
 
     @SerializedName("name")
-    final String name;
+    private final String name = null;
     public String getName() {
         return name;
     }

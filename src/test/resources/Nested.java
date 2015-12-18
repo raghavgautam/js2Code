@@ -1,7 +1,7 @@
 class Nested {
 
     @SerializedName("menu")
-    final Menu menu;
+    private final Menu menu = null;
     public Menu getMenu() {
         return menu;
     }
@@ -10,19 +10,19 @@ class Nested {
 class Menu {
 
     @SerializedName("id")
-    final String id;
+    private final String id = null;
     public String getId() {
         return id;
     }
 
     @SerializedName("value")
-    final String value;
+    private final String value = null;
     public String getValue() {
         return value;
     }
 
     @SerializedName("popup")
-    final Popup popup;
+    private final Popup popup = null;
     public Popup getPopup() {
         return popup;
     }
@@ -31,7 +31,7 @@ class Menu {
 class Popup {
 
     @SerializedName("menuitem")
-    final oneOfMenuitem menuitem;
+    private final oneOfMenuitem menuitem = null;
     public oneOfMenuitem getMenuitem() {
         return menuitem;
     }
@@ -40,13 +40,13 @@ class Popup {
 class oneOfMenuitem {
 
     @SerializedName("value")
-    final String value;
+    private final String value = null;
     public String getValue() {
         return value;
     }
 
     @SerializedName("onclick")
-    final String onclick;
+    private final String onclick = null;
     public String getOnclick() {
         return onclick;
     }
