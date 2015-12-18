@@ -1,1 +1,1 @@
-case class $class.name()($class.body().dropRight(2))
+case class $class.name()($class.body().drop(2))
