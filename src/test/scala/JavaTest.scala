@@ -23,9 +23,19 @@ class JavaTest {
   }
 
   @Test(dataProvider = "jsonProvider")
-  def testJs2Java(jsStr:String, clsName: String) = {
+  def javaTest(jsStr:String, clsName: String) = {
+    Template.setTemplates(Util.getResource("java-class-template.txt"), Util.getResource("java-field-template.txt"))
     val javaStr = js2Java.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
     val expected = Util.getResource(s"$clsName.java")
     Assert.assertEquals(javaStr, expected, s"Mismatch for case: $clsName")
   }
+
+  @Test(dataProvider = "jsonProvider")
+  def scalaTest(jsStr:String, clsName: String) = {
+    Template.setTemplates(Util.getResource("scala-class-template.txt"), Util.getResource("scala-field-template.txt"))
+    val scalaStr = js2Java.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
+    val expected = Util.getResource(s"$clsName.scala")
+    Assert.assertEquals(scalaStr, expected, s"Mismatch for case: $clsName")
+  }
+
 }
