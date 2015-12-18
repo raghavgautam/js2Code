@@ -18,9 +18,9 @@ object Template {
     javaClsTemplate = clsTemplate
     javaFieldTemplate = fieldTemplate
   }
-  private var javaClsTemplate = Util.getResource("class-template.txt")
+  private var javaClsTemplate = Util.getResource("java-class-template.txt")
   def classTemplate = javaClsTemplate
-  private var javaFieldTemplate = Util.getResource("field-template.txt")
+  private var javaFieldTemplate = Util.getResource("java-field-template.txt")
   def fieldTemplate = javaFieldTemplate
 }
 object Util {
