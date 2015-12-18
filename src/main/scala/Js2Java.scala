@@ -58,7 +58,7 @@ object js2Java {
     def parseArrOrMap(parsed: Any, className: String): String = {
       val cls = parsed match {
         case props: Map[String, Any] => Cls(className, genFields(props))
-        case propsArr: Seq[Map[String, Any]] => Cls(s"oneOf$className", genFields(propsArr.head))
+        case propsArr: Seq[Map[String, Any]] => Cls(s"OneOf$className", genFields(propsArr.head))
         case _ => throw new Exception(parsed.toString)
       }
       classes.append(cls)

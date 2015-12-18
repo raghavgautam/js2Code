@@ -31,13 +31,13 @@ class Menu {
 class Popup {
 
     @SerializedName("menuitem")
-    private final oneOfMenuitem menuitem = null;
-    public oneOfMenuitem getMenuitem() {
+    private final OneOfMenuitem menuitem = null;
+    public OneOfMenuitem getMenuitem() {
         return menuitem;
     }
 
 }
-class oneOfMenuitem {
+class OneOfMenuitem {
 
     @SerializedName("value")
     private final String value = null;
