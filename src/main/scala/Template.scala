@@ -14,8 +14,14 @@ object Template {
     velocityEngine.evaluate(context, w, "Test template", template)
     w.toString
   }
-  val classTemplate: String = Util.getResource("class-template.txt")
-  val fieldTemplate: String = Util.getResource("field-template.txt")
+  def setTemplates(clsTemplate: String, fieldTemplate: String): Unit = {
+    javaClsTemplate = clsTemplate
+    javaFieldTemplate = fieldTemplate
+  }
+  private var javaClsTemplate = Util.getResource("class-template.txt")
+  def classTemplate = javaClsTemplate
+  private var javaFieldTemplate = Util.getResource("field-template.txt")
+  def fieldTemplate = javaFieldTemplate
 }
 object Util {
   def getResource(name: String) = io.Source.fromURL(getClass.getResource(name)).mkString
