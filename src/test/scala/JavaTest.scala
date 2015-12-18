@@ -1,10 +1,11 @@
 
 import java.io.File
 import org.apache.commons.io.FileUtils
+import org.testng.Assert
 import org.testng.annotations._
 import scala.collection.JavaConverters._
 
-class SimpleTest {
+class JavaTest {
 
   @DataProvider(name = "jsonProvider")
   def jsonProvider(): Array[Array[Object]] = {
@@ -23,8 +24,8 @@ class SimpleTest {
 
   @Test(dataProvider = "jsonProvider")
   def testJs2Java(jsStr:String, clsName: String) = {
-    val javaStr = js2Java.generate(jsStr, clsName)
-    println(jsStr)
-    javaStr.foreach(println)
+    val javaStr = js2Java.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
+    val expected = Util.getResource(s"$clsName.java")
+    Assert.assertEquals(javaStr, expected, s"Mismatch for case: $clsName")
   }
 }
