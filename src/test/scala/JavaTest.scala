@@ -24,7 +24,15 @@ class JavaTest {
 
   @Test(dataProvider = "jsonProvider")
   def javaTest(jsStr:String, clsName: String) = {
-    Template.setTemplates(Util.getResource("java-class-template.txt"), Util.getResource("java-field-template.txt"))
+    Template.setTemplates(Util.getResource("java-class-template.vm"), Util.getResource("java-field-template.vm"))
+    val javaStr = js2Java.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
+    val expected = Util.getResource(s"$clsName.java")
+    Assert.assertEquals(javaStr, expected, s"Mismatch for case: $clsName")
+  }
+
+  @Test(dataProvider = "jsonProvider")
+  def javaTest2(jsStr:String, clsName: String) = {
+    Template.setTemplates(Util.getResource("java-class-template2.vm"), Util.getResource("java-field-template.vm"))
     val javaStr = js2Java.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
     val expected = Util.getResource(s"$clsName.java")
     Assert.assertEquals(javaStr, expected, s"Mismatch for case: $clsName")
@@ -32,10 +40,17 @@ class JavaTest {
 
   @Test(dataProvider = "jsonProvider")
   def scalaTest(jsStr:String, clsName: String) = {
-    Template.setTemplates(Util.getResource("scala-class-template.txt"), Util.getResource("scala-field-template.txt"))
+    Template.setTemplates(Util.getResource("scala-class-template.vm"), Util.getResource("scala-field-template.vm"))
     val scalaStr = js2Java.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
     val expected = Util.getResource(s"$clsName.scala")
     Assert.assertEquals(scalaStr, expected, s"Mismatch for case: $clsName")
   }
 
+  @Test(dataProvider = "jsonProvider")
+  def scalaTest2(jsStr:String, clsName: String) = {
+    Template.setTemplates(Util.getResource("scala-class-template2.vm"), Util.getResource("scala-field-template.vm"))
+    val scalaStr = js2Java.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
+    val expected = Util.getResource(s"$clsName.scala")
+    Assert.assertEquals(scalaStr, expected, s"Mismatch for case: $clsName")
+  }
 }

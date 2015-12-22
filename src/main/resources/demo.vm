@@ -1,0 +1,18 @@
+#macro(sepMaybe $index $size)
+#set ( $lastone = $size - 1 )
+#if( $index <= $lastone ), #end
+#end
+case class $class.name()(#foreach( $field in $class.getFields() )$field.name(): $field.type()#sepMaybe($velocityCount $class.getFields().size())#end)
+
+#macro(andMaybe $index $size)
+#set ( $lastone = $size - 1 )
+#if( $index <= $lastone ) and
+#else
+#end
+#end
+implicit val $class.name()Conversions = (
+#foreach( $field in $class.getFields())
+    (__ \ "$field.origName()").format[$field.type()]#andMaybe($velocityCount $class.getFields().size())
+#end
+
+)($class.name()#[[.]]#apply, unlift($class.name()#[[.]]#unapply))

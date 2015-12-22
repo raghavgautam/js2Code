@@ -1,3 +1,6 @@
+import java.util
+
+import scala.collection.JavaConverters._
 import scala.collection.immutable.{Iterable, WrappedString}
 import scala.collection.mutable
 
@@ -7,6 +10,8 @@ case class Cls(name: WrappedString, fields: Iterable[Field]) {
   override def toString: String = {
     Template.render(Template.classTemplate, Map("class" -> this))
   }
+
+  def getFields: util.List[Field] = fields.toList.asJava
 }
 case class Field(origName: WrappedString, `type`: WrappedString) {
   val name = sanitizeFieldName(origName)
@@ -45,7 +50,9 @@ object js2Java {
           parseArrOrMap(value, key.capitalize)
         case s: Map[String, Any] =>
           parseArrOrMap(value, key.capitalize)
-        case _ => value.getClass.getSimpleName
+        case _ =>
+          if (value == null) "Unknown"
+          else value.getClass.getSimpleName
       }
     }
     private def genFields(props: Map[String, Any]): Iterable[Field] = {

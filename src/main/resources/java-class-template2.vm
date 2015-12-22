@@ -1,0 +1,11 @@
+class $class.name() {
+
+#foreach( $field in $class.getFields() )
+    @SerializedName("$field.origName()")
+    private final $field.type() $field.name() = null;
+    public $field.type() get$field.name().capitalize()() {
+        return $field.name();
+    }
+
+#end
+}
