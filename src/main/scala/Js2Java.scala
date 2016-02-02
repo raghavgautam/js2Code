@@ -5,7 +5,7 @@ import scala.collection.immutable.{Iterable, WrappedString}
 import scala.collection.mutable
 
 case class Cls(name: WrappedString, fields: Iterable[Field]) {
-  val body: WrappedString = fields.map(_.toString).reduce(_ + _)
+  val body: WrappedString = if (fields.nonEmpty) fields.map(_.toString).reduce(_ + _) else ""
 
   override def toString: String = {
     Template.render(Template.classTemplate, Map("class" -> this))
@@ -42,8 +42,12 @@ object js2Java {
   private class Js2Java(parsedJson: Any, className: String) {
     val classes = mutable.ListBuffer[Cls]()
 
+    def underscoreToCamel(name: String) = "_([a-z\\d])".r.replaceAllIn(name, {m =>
+      m.group(1).toUpperCase()
+    })
     private def getType(kv: (String, Any)): String = {
-      val key: String = kv._1
+      def sanitizeKey(key: String): String = underscoreToCamel(key.replace("-", "_").replace(".", "_").replace(":", "_"))
+      val key: String = sanitizeKey(kv._1)
       val value: Any = kv._2
       value match {
         case s: Seq[Any] =>
@@ -62,10 +66,19 @@ object js2Java {
         Field(origName, typ.toString)
       }
     }
-    def parseArrOrMap(parsed: Any, className: String): String = {
+    private def parseArrOrMap(parsed: Any, className: String): String = {
       val cls = parsed match {
         case props: Map[String, Any] => Cls(className, genFields(props))
-        case propsArr: Seq[Map[String, Any]] => Cls(s"OneOf$className", genFields(propsArr.head))
+        case propsArr: Seq[Any] =>
+          if (propsArr.isEmpty)
+            Cls(s"OneOf$className", List())
+          else {
+            propsArr.head match {
+              case map: Map[String, Any] => Cls(s"OneOf$className", genFields(map))
+              case basic: Any => Cls(s"OneOf$className", List(Field(basic.getClass.getSimpleName, basic.getClass.getSimpleName)))
+            }
+
+          }
         case _ => throw new Exception(parsed.toString)
       }
       classes.append(cls)
