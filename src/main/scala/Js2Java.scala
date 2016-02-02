@@ -51,9 +51,9 @@ object js2Java {
       val value: Any = kv._2
       value match {
         case s: Seq[Any] =>
-          parseArrOrMap(value, key.capitalize)
+          parseArrOrMap(key.capitalize, value)
         case s: Map[String, Any] =>
-          parseArrOrMap(value, key.capitalize)
+          parseArrOrMap(key.capitalize, value)
         case _ =>
           if (value == null) "Unknown"
           else value.getClass.getSimpleName
@@ -66,7 +66,7 @@ object js2Java {
         Field(origName, typ.toString)
       }
     }
-    private def parseArrOrMap(parsed: Any, className: String): String = {
+    private def parseArrOrMap(className: String, parsed: Any): String = {
       val cls = parsed match {
         case props: Map[String, Any] => Cls(className, genFields(props))
         case propsArr: Seq[Any] =>
@@ -86,7 +86,7 @@ object js2Java {
     }
 
     def generate = {
-      parseArrOrMap(parsedJson, className)
+      parseArrOrMap(className, parsedJson)
       classes.reverse.toList
     }
   }
