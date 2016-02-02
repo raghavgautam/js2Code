@@ -1,9 +1,15 @@
+#macro(arrBegin $flag)
+#if($flag)List<#end
+#end
+#macro(arrEnd $flag)
+#if($flag)>#end
+#end
 class $class.name() {
 
 #foreach( $field in $class.getFields() )
     @SerializedName("$field.origName()")
-    private final $field.type() $field.name() = null;
-    public $field.type() get$field.name().capitalize()() {
+    private final #arrBegin($field.arr)$field.type()#arrEnd($field.arr) $field.name() = null;
+    public #arrBegin($field.arr)$field.type()#arrEnd($field.arr) get$field.name().capitalize()() {
         return $field.name();
     }
 

@@ -2,4 +2,10 @@
 #set ( $lastone = $size - 1 )
 #if( $index <= $lastone ), #end
 #end
-case class $class.name()(#foreach( $field in $class.getFields() )$field.name(): $field.type()#sepMaybe($velocityCount $class.getFields().size())#end)
+#macro(arrBegin $flag)
+#if($flag)List[#end
+#end
+#macro(arrEnd $flag)
+#if($flag)]#end
+#end
+case class $class.name()(#foreach( $field in $class.getFields() )$field.name(): #arrBegin($field.isArr())$field.type()#arrEnd($field.isArr())#sepMaybe($velocityCount $class.getFields().size())#end)
