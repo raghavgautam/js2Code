@@ -35,25 +35,47 @@ case class Field(origName: WrappedString, `type`: WrappedString) {
 
 object js2Java {
   def generate(jsonStr: String, clsName: String) = {
-    val parsedJson: Any = scala.util.parsing.json.JSON.parseFull(jsonStr).get
-    new Js2Java(parsedJson, clsName).generate
+    scala.util.parsing.json.JSON.parseFull(jsonStr).get match {
+      case parsedJson: Map[String, Any] => new Js2Java(parsedJson, clsName).generate
+      case _ => throw new RuntimeException("Invalid JSON Object.")
+    }
+
   }
 
-  private class Js2Java(parsedJson: Any, className: String) {
+  private class Js2Java(parsedJson: Map[String, Any], className: String) {
     val classes = mutable.ListBuffer[Cls]()
 
     def underscoreToCamel(name: String) = "_([a-z\\d])".r.replaceAllIn(name, {m =>
       m.group(1).toUpperCase()
     })
+
+    private def parseArr(className: String, parsed: Any): Cls = {
+      parsed match {
+        case propsArr: Seq[Any] =>
+          if (propsArr.isEmpty)
+            Cls(s"OneOf$className", List())
+          else {
+            propsArr.head match {
+              case map: Map[String, Any] => Cls(s"OneOf$className", genFields(map))
+              case basic: Any => Cls(s"OneOf$className", List(Field(basic.getClass.getSimpleName, basic.getClass.getSimpleName)))
+            }
+          }
+        case _ => throw new Exception(parsed.toString)
+      }
+    }
     private def getType(kv: (String, Any)): String = {
       def sanitizeKey(key: String): String = underscoreToCamel(key.replace("-", "_").replace(".", "_").replace(":", "_"))
       val key: String = sanitizeKey(kv._1)
       val value: Any = kv._2
       value match {
         case s: Seq[Any] =>
-          parseArrOrMap(key.capitalize, value)
+          val cls = parseArr(key.capitalize, value)
+          classes.append(cls)
+          cls.name
         case s: Map[String, Any] =>
-          parseArrOrMap(key.capitalize, value)
+          val cls = Cls(key.capitalize, genFields(s))
+          classes.append(cls)
+          cls.name
         case _ =>
           if (value == null) "Unknown"
           else value.getClass.getSimpleName
@@ -66,27 +88,9 @@ object js2Java {
         Field(origName, typ.toString)
       }
     }
-    private def parseArrOrMap(className: String, parsed: Any): String = {
-      val cls = parsed match {
-        case props: Map[String, Any] => Cls(className, genFields(props))
-        case propsArr: Seq[Any] =>
-          if (propsArr.isEmpty)
-            Cls(s"OneOf$className", List())
-          else {
-            propsArr.head match {
-              case map: Map[String, Any] => Cls(s"OneOf$className", genFields(map))
-              case basic: Any => Cls(s"OneOf$className", List(Field(basic.getClass.getSimpleName, basic.getClass.getSimpleName)))
-            }
-
-          }
-        case _ => throw new Exception(parsed.toString)
-      }
-      classes.append(cls)
-      cls.name
-    }
 
     def generate = {
-      parseArrOrMap(className, parsedJson)
+      Cls(className, genFields(parsedJson))
       classes.reverse.toList
     }
   }
