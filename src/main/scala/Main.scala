@@ -4,13 +4,13 @@ object Main extends App {
     case 0 =>
       println("No arg provided. Using demo data...")
       println(data)
-      printJava(js2Java.generate(data, "JsRoot"), s"Invalid json.\n${data.take(500)}")
+      printJava(js2Code.generate(data, "JsRoot"), s"Invalid json.\n${data.take(500)}")
       println("Please supply a json file name or url as argument.")
     case 1 =>
       val arg: String = args.head
       if (arg.startsWith("http://") || arg.startsWith("https://")) {
         val data = io.Source.fromURL(arg).mkString
-        printJava(js2Java.generate(data, "JsRoot"), s"Invalid json fetched from url: $arg\n${data.take(500)}")
+        printJava(js2Code.generate(data, "JsRoot"), s"Invalid json fetched from url: $arg\n${data.take(500)}")
       } else {
         println("Need to handle this case.")
       }

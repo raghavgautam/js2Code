@@ -33,16 +33,16 @@ case class Field(origName: WrappedString, `type`: WrappedString, isArr: Boolean=
   }
 }
 
-object js2Java {
+object js2Code {
   def generate(jsonStr: String, clsName: String) = {
     scala.util.parsing.json.JSON.parseFull(jsonStr).get match {
-      case parsedJson: Map[String, Any] => new Js2Java(parsedJson, clsName).generate
+      case parsedJson: Map[String, Any] => new Js2CodeInner(parsedJson, clsName).generate
       case _ => throw new RuntimeException("Invalid JSON Object.")
     }
 
   }
 
-  private class Js2Java(parsedJson: Map[String, Any], className: String) {
+  private class Js2CodeInner(parsedJson: Map[String, Any], className: String) {
     val classes = mutable.ListBuffer[Cls]()
 
     def underscoreToCamel(name: String) = "_([a-z\\d])".r.replaceAllIn(name, {m =>
