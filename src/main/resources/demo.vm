@@ -1,6 +1,7 @@
 #macro(sepMaybe $index $size)
 #set ( $lastone = $size - 1 )
-#if( $index <= $lastone ), #end
+#if( $index <= $lastone ),
+                          #end
 #end
 case class $class.name()(#foreach( $field in $class.getFields() )$field.name(): $field.type()#sepMaybe($velocityCount $class.getFields().size())#end)
 
