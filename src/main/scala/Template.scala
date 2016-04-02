@@ -19,7 +19,7 @@ object Template {
   def setTemplates(clsTemplate: String): Unit = {
     javaClsTemplate = clsTemplate
   }
-  private var javaClsTemplate = Util.getResource("java-class-template2.vm")
+  private var javaClsTemplate = Util.getResource("java-class-template.vm")
   def classTemplate = javaClsTemplate
 }
 object Util {
