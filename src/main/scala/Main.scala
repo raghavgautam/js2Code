@@ -1,5 +1,5 @@
 object Main extends App {
-  val data = Util.getResource("sample.json")
+  val data = Util.getResource("json/sample.json")
   args.length match {
     case 0 =>
       println("No arg provided. Using demo data...")
