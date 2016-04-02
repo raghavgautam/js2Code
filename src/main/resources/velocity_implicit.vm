@@ -1,0 +1,3 @@
+#* @implicitly included *#
+#* @vtlvariable name="class" type="js2code.Cls" *#
+#* @vtlvariable name="field" type="js2code.Field" *#
