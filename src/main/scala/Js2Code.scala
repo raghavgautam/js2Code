@@ -5,14 +5,13 @@ import scala.collection.immutable.{Iterable, WrappedString}
 import scala.collection.mutable
 
 case class Cls(name: WrappedString, fields: Iterable[Field]) {
-  val body: WrappedString = if (fields.nonEmpty) fields.map(_.toString).reduce(_ + _) else ""
-
   override def toString: String = {
     Template.render(Template.classTemplate, Map("class" -> this))
   }
 
   def getFields: util.List[Field] = fields.toList.asJava
 }
+
 case class Field(origName: WrappedString, `type`: WrappedString, isArr: Boolean=false) {
   val name = sanitizeFieldName(origName)
   private def sanitizeFieldName(name: WrappedString): WrappedString = {
@@ -27,13 +26,9 @@ case class Field(origName: WrappedString, `type`: WrappedString, isArr: Boolean=
     x ++= partName
     x.toString().filter(_.isLetterOrDigit)
   }
-
-  override def toString = {
-    Template.render(Template.fieldTemplate, Map("field" -> this))
-  }
 }
 
-object js2Code {
+object Js2Code {
   def generate(jsonStr: String, clsName: String) = {
     scala.util.parsing.json.JSON.parseFull(jsonStr).get match {
       case parsedJson: Map[String, Any] => new Js2CodeInner(parsedJson, clsName).generate
