@@ -1,1 +1,0 @@
-case class Simple(id: Double, name: String)

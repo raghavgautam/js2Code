@@ -10,7 +10,7 @@ class JavaTest {
   @DataProvider(name = "jsonProvider")
   def jsonProvider(): Array[Array[Object]] = {
     def getJsonFiles: Array[File] = {
-      val simpleJson = this.getClass.getResource("simple.json").getFile
+      val simpleJson = this.getClass.getResource("json/simple.json").getFile
       val resourceDir: File = new File(simpleJson).getParentFile
       val jsonFilter: Array[String] = Array("json")
       FileUtils.listFiles(resourceDir, jsonFilter, false).asScala.toArray

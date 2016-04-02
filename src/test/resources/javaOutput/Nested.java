@@ -1,8 +1,8 @@
 class Nested {
 
     @SerializedName("menu")
-    private final Menu menu = null;
-    public Menu getMenu() {
+    private final scalaOutput.Menu menu = null;
+    public scalaOutput.Menu getMenu() {
         return menu;
     }
 
@@ -22,8 +22,8 @@ class Menu {
     }
 
     @SerializedName("popup")
-    private final Popup popup = null;
-    public Popup getPopup() {
+    private final scalaOutput.Popup popup = null;
+    public scalaOutput.Popup getPopup() {
         return popup;
     }
 
@@ -31,8 +31,8 @@ class Menu {
 class Popup {
 
     @SerializedName("menuitems")
-    private final List<OneOfMenuitems> menuitems = null;
-    public List<OneOfMenuitems> getMenuitems() {
+    private final List<scalaOutput.OneOfMenuitems> menuitems = null;
+    public List<scalaOutput.OneOfMenuitems> getMenuitems() {
         return menuitems;
     }
 
