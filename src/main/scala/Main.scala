@@ -1,3 +1,5 @@
+import js2code.{Cls, Js2Code, Util}
+
 object Main extends App {
   val data = Util.getResource("json/sample.json")
   args.length match {

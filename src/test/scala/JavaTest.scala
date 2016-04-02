@@ -1,8 +1,11 @@
 
 import java.io.File
+
+import js2code.{Js2Code, Template, Util}
 import org.apache.commons.io.FileUtils
 import org.testng.Assert
 import org.testng.annotations._
+
 import scala.collection.JavaConverters._
 
 class JavaTest {
