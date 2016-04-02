@@ -1,24 +1,8 @@
-/*
- * Copyright 2016 rgautam
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 class Nested {
 
     @SerializedName("menu")
-    private final output.scala.Menu menu = null;
-    public output.scala.Menu getMenu() {
+    private final Menu menu = null;
+    public Menu getMenu() {
         return menu;
     }
 
@@ -38,8 +22,8 @@ class Menu {
     }
 
     @SerializedName("popup")
-    private final output.scala.Popup popup = null;
-    public output.scala.Popup getPopup() {
+    private final Popup popup = null;
+    public Popup getPopup() {
         return popup;
     }
 
@@ -47,8 +31,8 @@ class Menu {
 class Popup {
 
     @SerializedName("menuitems")
-    private final List<output.scala.OneOfMenuitems> menuitems = null;
-    public List<output.scala.OneOfMenuitems> getMenuitems() {
+    private final List<OneOfMenuitems> menuitems = null;
+    public List<OneOfMenuitems> getMenuitems() {
         return menuitems;
     }
 

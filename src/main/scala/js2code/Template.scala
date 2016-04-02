@@ -37,6 +37,6 @@ object Template {
   def setTemplates(clsTemplate: String): Unit = {
     javaClsTemplate = clsTemplate
   }
-  private var javaClsTemplate = Util.getResource("template/java.vm")
+  private var javaClsTemplate = Util.getResource("/template/java.vm")
   def classTemplate = javaClsTemplate
 }

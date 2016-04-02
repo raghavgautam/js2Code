@@ -17,7 +17,7 @@
 package js2code
 
 import scala.collection.immutable.WrappedString
-
+import scala.collection.JavaConverters._
 /**
   * Created by rgautam on 4/1/16.
   */
@@ -26,5 +26,5 @@ case class Cls(name: WrappedString, fields: Iterable[Field]) {
     Template.render(Template.classTemplate, Map("class" -> this))
   }
 
-  def getFields: List[Field] = fields.toList
+  def getFields = fields.toList.asJava
 }
