@@ -30,14 +30,14 @@ class Menu {
 }
 class Popup {
 
-    @SerializedName("menuitem")
-    private final OneOfMenuitem menuitem = null;
-    public OneOfMenuitem getMenuitem() {
-        return menuitem;
+    @SerializedName("menuitems")
+    private final List<OneOfMenuitems> menuitems = null;
+    public List<OneOfMenuitems> getMenuitems() {
+        return menuitems;
     }
 
 }
-class OneOfMenuitem {
+class OneOfMenuitems {
 
     @SerializedName("value")
     private final String value = null;
