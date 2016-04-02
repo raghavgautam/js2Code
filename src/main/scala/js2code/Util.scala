@@ -20,5 +20,5 @@ package js2code
   * Created by rgautam on 4/1/16.
   */
 object Util {
-  def getResource(name: String) = io.Source.fromURL(getClass.getResource(name)).mkString
+  def getResource(name: String): String = io.Source.fromURL(getClass.getResource(name)).mkString
 }

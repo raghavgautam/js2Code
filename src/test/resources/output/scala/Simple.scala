@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package scalaOutput
+package output.scala
 
 case class Simple(id: Double, name: String)

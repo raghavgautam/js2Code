@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package scalaOutput
+package output.scala
 
 case class Nested(menu: Menu)
 case class Menu(id: String, value: String, popup: Popup)
