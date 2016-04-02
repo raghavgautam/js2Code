@@ -1,1 +1,0 @@
-case class $class.name()($class.body().drop(2))

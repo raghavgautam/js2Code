@@ -1,7 +1,0 @@
-#macro(arrBegin $flag)
-#if($flag)List[#end
-#end
-#macro(arrEnd $flag)
-#if($flag)]#end
-#end
-, $field.name(): #arrBegin($field.arr)$field.type()#arrEnd($field.arr)
