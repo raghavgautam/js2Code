@@ -8,7 +8,7 @@ import org.testng.annotations._
 
 import scala.collection.JavaConverters._
 
-class JavaTest {
+class CodeTest {
 
   @DataProvider(name = "jsonProvider")
   def jsonProvider(): Array[Array[Object]] = {
