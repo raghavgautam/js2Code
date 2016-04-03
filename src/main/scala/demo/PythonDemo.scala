@@ -24,7 +24,7 @@ import scala.sys.process.Process
 import scala.util.control.Exception
 
 object PythonDemo extends App {
-  Template.setTemplates(Util.getResource("template/python.vm"))
+  val pythonTemplate = Util.getResource("/template/python.vm")
   val pathInfo = Array(
     ("/Users/rgautam/tmp/topo-summary.json", "TopologiesSummary",
       "/Users/rgautam/certification/HDPTests/beaver/component/dataStructure/storm_rest/topology/topology_summary.py"),
@@ -42,7 +42,7 @@ object PythonDemo extends App {
   pathInfo.foreach { onePinfo =>
     val jsStr = io.Source.fromFile(onePinfo._1).mkString
     val initClsName: String = onePinfo._2
-    val scalaStr = Js2Code.generate(jsStr, initClsName).map(_.toString).reduce(_ + "\n" + _)
+    val scalaStr = Js2Code.generate(jsStr, initClsName).map(_.renderCode(pythonTemplate)).reduce(_ + "\n" + _)
     val pyFile = onePinfo._3
     new PrintWriter(pyFile) {
       write(scalaStr)

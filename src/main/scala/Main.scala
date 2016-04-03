@@ -1,7 +1,8 @@
 import js2code.{Cls, Js2Code, Util}
 
 object Main extends App {
-  val data = Util.getResource("json/sample.json")
+  val data = Util.getResource("/json/sample.json")
+  val javaTemplate = Util.getResource("/template/java.vm")
   args.length match {
     case 0 =>
       println("No arg provided. Using demo data...")
@@ -21,7 +22,7 @@ object Main extends App {
 
   def printJava(java: List[Cls], message: String): Unit = {
     try {
-      java.foreach(println)
+      java.foreach(i => println(i.renderCode(javaTemplate)))
     } catch {
       case ex: Throwable => println(message)
     }

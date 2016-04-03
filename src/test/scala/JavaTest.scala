@@ -1,7 +1,7 @@
 
 import java.io.File
 
-import js2code.{Js2Code, Template, Util}
+import js2code.{Js2Code, Util}
 import org.apache.commons.io.FileUtils
 import org.testng.Assert
 import org.testng.annotations._
@@ -27,16 +27,16 @@ class JavaTest {
 
   @Test(dataProvider = "jsonProvider")
   def javaTest(jsStr:String, clsName: String) = {
-    Template.setTemplates(Util.getResource("/template/java.vm"))
-    val javaStr = Js2Code.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
+    val javaTemplate = Util.getResource("/template/java.vm")
+    val javaStr = Js2Code.generate(jsStr, clsName).map(_.renderCode(javaTemplate)).reduce(_ + "\n" + _)
     val expected = Util.getResource(s"/output/java/$clsName.java")
     Assert.assertEquals(javaStr, expected, s"Mismatch for case: $clsName")
   }
 
   @Test(dataProvider = "jsonProvider")
   def scalaTest(jsStr:String, clsName: String) = {
-    Template.setTemplates(Util.getResource("/template/scala.vm"))
-    val scalaStr = Js2Code.generate(jsStr, clsName).map(_.toString).reduce(_ + "\n" + _)
+    val scalaTemplate = Util.getResource("/template/scala.vm")
+    val scalaStr = Js2Code.generate(jsStr, clsName).map(_.renderCode(scalaTemplate)).reduce(_ + "\n" + _)
     val expected = Util.getResource(s"/output/scala/$clsName.scala")
     Assert.assertEquals(scalaStr, expected, s"Mismatch for case: $clsName")
   }

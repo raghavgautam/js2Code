@@ -34,9 +34,4 @@ object Template {
     velocityEngine.evaluate(context, w, "Test template", template)
     w.toString
   }
-  def setTemplates(clsTemplate: String): Unit = {
-    javaClsTemplate = clsTemplate
-  }
-  private var javaClsTemplate = Util.getResource("/template/java.vm")
-  def classTemplate = javaClsTemplate
 }
