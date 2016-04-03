@@ -3,18 +3,18 @@ import java.io.File
 
 import js2code.{Js2Code, Util}
 import org.apache.commons.io.FileUtils
-import org.testng.Assert
+import org.scalatest.testng.TestNGSuiteLike
+import org.testng.{Assert, TestNG}
 import org.testng.annotations._
 
 import scala.collection.JavaConverters._
 
-class CodeTest {
+class CodeTest extends TestNG with TestNGSuiteLike {
 
   @DataProvider(name = "jsonProvider")
   def jsonProvider(): Array[Array[Object]] = {
     def getJsonFiles: Array[File] = {
       val jsonDir = this.getClass.getResource("json").getFile
-      val resourceDir: File = new File(jsonDir).getParentFile
       val jsonFilter: Array[String] = Array("json")
       FileUtils.listFiles(new File(jsonDir), jsonFilter, false).asScala.toArray
     }
