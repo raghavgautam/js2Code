@@ -1,10 +1,13 @@
 *.class
 *.log
+flymd*
+.#*
 
 # sbt specific
 .cache
 .history
 .lib/
+.idea/
 dist/*
 target/
 lib_managed/
