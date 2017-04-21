@@ -68,15 +68,15 @@ object Js2Code {
           (typ, false)
       }
     }
-    private def genFields(props: Map[String, Any]): Iterable[Field] = {
+    private def genFields(props: Map[String, Any]) = {
       props.map { kv =>
         val origName: String = kv._1
         val typ = getType(kv)
         Field(origName, typ._1, typ._2)
-      }
+      }.toList
     }
 
-    def generate = {
+    def generate: List[Cls] = {
       classes.append(Cls(className, genFields(parsedJson)))
       classes.reverse.toList
     }

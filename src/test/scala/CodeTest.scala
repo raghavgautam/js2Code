@@ -1,7 +1,7 @@
 
 import java.io.File
 
-import js2code.{Js2Code, Util}
+import js2code.{Cls, Js2Code, Util}
 import org.apache.commons.io.FileUtils
 import org.scalatest.testng.TestNGSuiteLike
 import org.testng.{Assert, TestNG}
@@ -40,4 +40,44 @@ class CodeTest extends TestNG with TestNGSuiteLike {
     val expected = Util.getResource(s"/output/scala/$clsName.scala")
     Assert.assertEquals(scalaStr, expected, s"Mismatch for case: $clsName")
   }
+
+  @Test(dataProvider = "jsonProvider")
+  def toJson(jsStr: String, clsName: String) = {
+    val jsons: List[String] = Js2Code.generate(jsStr, clsName).map(_.toJson)
+    Assert.assertTrue(jsons.nonEmpty, "Json conversion failed.")
+    jsons.foreach(s => {
+      Assert.assertTrue(s.length > 10, s"Json conversion failed for string $s")
+      Assert.assertTrue(s.contains("{"), s"Json conversion failed for string $s")
+      Assert.assertTrue(s.contains("}"), s"Json conversion failed for string $s")
+    }
+    )
+  }
+
+  @Test
+  def fromJson() {
+    val jsonStr =
+      """{
+        |"name":"Menu",
+        |"fields":[
+        |   {
+        |     "origName":"id",
+        |     "type":"String",
+        |     "isArr":false
+        |   },
+        |   {
+        |     "origName":"value",
+        |     "type":"String",
+        |     "isArr":false
+        |    },
+        |    {
+        |      "origName":"popup",
+        |      "type":"Popup",
+        |      "isArr":false
+        |    }
+        |  ]
+        |}""".stripMargin
+    val cls: Cls = Cls.fromJson(jsonStr)
+    Assert.assertEquals(cls.name, "Menu", s"Json to Cls conversion failed.")
+  }
+
 }

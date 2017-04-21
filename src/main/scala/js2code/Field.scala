@@ -16,14 +16,18 @@
 
 package js2code
 
+import net.liftweb.json.DefaultFormats
+
 import scala.collection.immutable.WrappedString
 import scala.collection.mutable
 
 /**
   * Created by rgautam on 4/1/16.
   */
-case class Field(origName: WrappedString, `type`: WrappedString, isArr: Boolean=false) {
-  val name = sanitizeFieldName(origName)
+case class Field(origName: String, `type`: String, isArr: Boolean=false) {
+  def getOrigName: WrappedString = origName
+  def getType: WrappedString = `type`
+  val name = sanitizeFieldName(getOrigName)
   private def sanitizeFieldName(name: WrappedString): WrappedString = {
     val x = mutable.StringBuilder.newBuilder
     x += name.head
@@ -36,4 +40,5 @@ case class Field(origName: WrappedString, `type`: WrappedString, isArr: Boolean=
     x ++= partName
     x.toString().filter(_.isLetterOrDigit)
   }
+  implicit val formats = DefaultFormats
 }

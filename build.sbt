@@ -15,3 +15,5 @@ libraryDependencies += "org.apache.velocity" % "velocity" % "1.7"
 libraryDependencies += "org.apache.velocity" % "velocity-tools" % "2.0"
 
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "3.0.0-SNAP13"
+
+libraryDependencies += "net.liftweb" % "lift-json_2.11" % "3.0"

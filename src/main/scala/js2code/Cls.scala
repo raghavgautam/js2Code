@@ -16,18 +16,29 @@
 
 package js2code
 
+import net.liftweb.json._
+
 import scala.collection.immutable.WrappedString
 import scala.collection.JavaConverters._
 /**
   * Created by rgautam on 4/1/16.
   */
-case class Cls(name: WrappedString, fields: Iterable[Field]) {
+case class Cls(name: String, fields: List[Field]) {
   override def toString(): String = {
     throw new RuntimeException("should not get called.")
   }
   def renderCode(template: String): String = {
     Template.render(template, Map("class" -> this))
   }
+  def getName: WrappedString = name
 
-  def getFields = fields.toList.asJava
+  def getFields = fields.asJava
+
+  implicit val formats = DefaultFormats
+  def toJson: String = Serialization.write(this)
+}
+
+object Cls {
+  implicit val formats = DefaultFormats
+  def fromJson(json: String): Cls = parse(json).extract[Cls]
 }
